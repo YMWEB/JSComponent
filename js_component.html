@@ -1,0 +1,143 @@
+<html>
+	<head>
+		<style>
+		.btn-edit{
+			display:none;
+		}
+		</style>
+
+	</head>
+	<body>
+	<button id="add">Add</button>
+
+
+	<script>
+	function extend(obj1,obj2){
+		for (var attr in obj2){
+			obj1[attr] = obj2[attr];
+		}
+	}
+
+	var Component = function(){
+		
+		this.default={
+			id:'',
+			href:'',
+			title:'',
+			desc:'',
+			
+		}
+		
+	}
+
+	Component.prototype.init=function(opt){
+		extend(this.default,opt);
+		this.create();
+		this.editTo();
+	}
+
+	Component.prototype.create =function(){
+			
+			this.root = document.createElement("article");
+		
+			this.root.innerHTML = '<img src="'+this.default.href+'"/>'+'<h2>'+this.default.title+'</h2>'+'<textarea>'+this.default.desc+'</textarea>'+'<button class="btn btn-edit">Edit</button>';
+	
+			document.body.appendChild(this.root);
+
+		
+	}
+
+	Component.prototype.editTo = function(){
+		var This = this;
+		var editBut = document.getElementsByClassName('btn-edit');
+		editBut[0].addEventListener('click',function(){
+			document.body.firstChild.style.opacity = "0.5";
+		})
+		editBut[0].addEventListener('mouseenter',function(){
+			This.style.display ="block";
+		})
+		editBut[0].addEventListener('mouseout',function(){
+			This.style.display ="none";
+		})
+	}
+
+	
+	var Modal = function(){
+		this.default={
+			
+			href:'',
+			title:'',
+			desc:'',
+			
+		}
+
+	}
+
+	Modal.prototype.init = function(opt){
+		extend(this.default,opt);
+		this.create();
+	
+		this.saveTo();
+		this.cancelTo();
+	}
+
+	Modal.prototype.create= function(){
+
+		this.root = document.createElement("div");
+		this.root.className ="model-box";
+		
+		this.root.innerHTML = '<label>'+'</label>'+'<label>image</label>'+'<input type="text" name="image" placeholder="add image" />'+
+
+							'<label> Title </label>'+'<input type="text" name="title" />'+'<label>Description</lable>'+'<textarea></textarea>'+
+							'<button class="save-but">Save</button>'+
+							'<button class="cancel-but">Cancel</button>';
+	
+
+		document.body.appendChild(this.root);
+	}
+	
+	Modal.prototype.saveTo = function(){
+			var This = this;
+			var options ="";
+			var saveBut = document.getElementsByClassName('save-but');
+			saveBut[0].addEventListener('click',function(){
+				var image_val = document.getElementsByName('image')[0].value;
+				var title_val = document.getElementsByName('title')[0].value;
+				var textarea_val= document.getElementsByTagName('textarea')[0].value;
+
+				return options ={
+					href:image_val,
+					title:title_val,
+					desc:textarea_val
+				}
+
+			})
+			This.root.style.display="none";
+
+			var component = new Component();
+			component.init(options);
+	}
+
+	Modal.prototype.cancelTo = function(){
+		var This = this;
+		var cancelBut = document.getElementsByClassName('cancel-but');
+		cancelBut[1].addEventListener('click',function(){
+			document.body.removeChild(This.root);
+		})
+	}
+	
+
+
+/* start the interaction */
+
+	document.getElementById('add').addEventListener('click',function(){
+		var modal = new Modal();
+		modal.init();
+
+	})
+	
+
+	</script>
+	</body>
+
+</html>
