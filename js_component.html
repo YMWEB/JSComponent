@@ -2,7 +2,13 @@
 	<head>
 		<style>
 		.btn-edit{
-			display:none;
+			opacity:0;
+		}
+		body{
+			z-index:1;
+		}
+		div{
+			z-index:2;
 		}
 		</style>
 
@@ -34,6 +40,7 @@
 		extend(this.default,opt);
 		this.create();
 		this.editTo();
+		this.hover();
 	}
 
 	Component.prototype.create =function(){
@@ -47,18 +54,28 @@
 		
 	}
 
+	Component.prototype.hover = function(){
+		
+		var editBut = document.getElementsByClassName('btn-edit');
+		editBut[0].addEventListener('mouseenter',function(){
+			
+			this.style.opacity ="1";
+		})
+		editBut[0].addEventListener('mouseout',function(){
+
+			this.style.opacity ="0";
+		})
+	}
+
 	Component.prototype.editTo = function(){
 		var This = this;
 		var editBut = document.getElementsByClassName('btn-edit');
 		editBut[0].addEventListener('click',function(){
-			document.body.firstChild.style.opacity = "0.5";
+			document.body.style.opacity = "0.5";
+			var modal = new Modal();
+			modal.init();
 		})
-		editBut[0].addEventListener('mouseenter',function(){
-			This.style.display ="block";
-		})
-		editBut[0].addEventListener('mouseout',function(){
-			This.style.display ="none";
-		})
+		
 	}
 
 	
@@ -92,36 +109,41 @@
 							'<button class="save-but">Save</button>'+
 							'<button class="cancel-but">Cancel</button>';
 	
-
+		this.root.style.opacity = "1";
 		document.body.appendChild(this.root);
+
 	}
 	
 	Modal.prototype.saveTo = function(){
 			var This = this;
-			var options ="";
+		
 			var saveBut = document.getElementsByClassName('save-but');
 			saveBut[0].addEventListener('click',function(){
 				var image_val = document.getElementsByName('image')[0].value;
 				var title_val = document.getElementsByName('title')[0].value;
 				var textarea_val= document.getElementsByTagName('textarea')[0].value;
 
-				return options ={
+				var options ={
 					href:image_val,
 					title:title_val,
 					desc:textarea_val
 				}
 
-			})
-			This.root.style.display="none";
+				document.body.removeChild(This.root);
+				
+				var component = new Component();
+				component.init(options);
 
-			var component = new Component();
-			component.init(options);
+			})
+			
+
+		
 	}
 
 	Modal.prototype.cancelTo = function(){
 		var This = this;
 		var cancelBut = document.getElementsByClassName('cancel-but');
-		cancelBut[1].addEventListener('click',function(){
+		cancelBut[0].addEventListener('click',function(){
 			document.body.removeChild(This.root);
 		})
 	}
