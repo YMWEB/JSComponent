@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf8">
+<head>
+	<title>Code test</title>
+	<style>
+		/* Add CSS */
+		html{
+			width:100%;
+			height:100%;
+
+		}
+		body{
+			font-size:14px;
+			background-color: rgb(242,242,242);
+		}
+		h2{
+			font-size:1em;
+			font-weight: 600;
+		}
+		.main{
+			display:-webkit-flex;
+			display:-ms-flexbox;
+			display:-webkit-box;
+			display:flex;
+			-moz-box-direction:row;
+			-webkit-flex-direction:row;
+			-ms-flexbox-direction:row;
+			-ms-flex-direction:row;
+			flex-direction:row;
+			
+
+		}
+		.content{
+			
+			display:-webkit-flex;
+			display:-ms-flexbox;
+			display:-webkit-box;
+			display:flex;
+			-moz-box-direction:row;
+			-webkit-flex-direction:row;
+			-ms-flexbox-direction:row;
+			-ms-flex-direction:row;
+			flex-direction:row;
+			
+		}
+		article{
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+			
+			padding:0.56em;
+			background-color: #fff;
+			border:0.07em solid lightgrey;
+			
+			margin-bottom:0.7em;
+			margin-right:0.7em;
+			position:relative;
+		}
+
+		.btn{
+			background-color: green;
+			color:#fff;
+			padding:0.7em;
+			border:0;
+			border-radius: 0.14em;
+			font-weight: 600;
+
+
+		}
+		input,textarea{
+			border:0.07em solid lightgrey;
+			margin-top:0.7em;
+			margin-bottom:0.7em;
+			height:2.31em;
+			width:23.1em;
+
+		}
+
+		textarea{
+			height:5.95em;
+		}
+		.btn-edit{
+			opacity:0;
+			position:relative;
+			text-align:center;
+			position:absolute;
+			top:0;
+			right:0;
+			background-color: black;
+
+		}
+		.btn-cancel{
+			background-color: #fff;
+			color:grey;
+		}
+		.modal-box:after{
+			content:" ";
+			height:1,4em;
+
+		}
+
+		.add:after{
+			content:"Add Article";
+		}
+		.edit:after{
+			content:"Edit Article";
+		}
+		.modal-box{
+			
+			height:26.04em;
+			position:absolute;
+			left:50%;
+			top:50%;
+			background-color: #fff;
+			display:-webkit-flex;
+			display:-ms-flexbox;
+			display:-webkit-box;
+			display:flex;
+				-moz-box-direction:column;
+			-webkit-flex-direction:column;
+			-ms-flexbox-direction:column;
+			-ms-flex-direction:column;
+			flex-direction:column;
+			
+			-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+				padding-left:1em;
+				padding-right:1em;
+
+		}
+		.modal-box div{
+			text-align: right;
+		}
+		.modal-box button{
+			margin-right: 1.26em;
+		}
+		/* must 16 * 9 for image */
+		article div{
+			width:100%;
+			position:relative;
+			height:0;
+			padding-bottom:56.25%;
+			overflow: hidden;
+	
+		}
+		article img{
+			position:absolute;
+			display:block;
+			max-width:100%;
+			max-height:100%;
+			left:0;
+			right:0;
+			top:0;
+			bottom:0;
+			margin:auto;
+		}
+
+
+
+		@media (max-width: 1200px){
+			body{
+				font-size:16px
+			}
+			.content{
+				display:-webkit-flex;
+			display:-ms-flexbox;
+			display:-webkit-box;
+			display:flex;
+				-moz-box-direction:column;
+			-webkit-flex-direction:column;
+			-ms-flexbox-direction:column;
+			-ms-flex-direction:column;
+			flex-direction:column;
+
+
+			}
+		}
+		
+	</style>
+</head>
+<body>
+	<div class="main">	
+	<div class="content">
+
+
+</div>
+<nav>
+		<button id="add" class="btn add-btn" >+Add New</button>
+	</nav>
+</div>	
+
+
+<script>
+;(function(window,undefined){
+	function extend(obj1,obj2){
+		for (var attr in obj2){
+			obj1[attr] = obj2[attr];
+		}
+	}
+/* component for the article */
+	var Component = function(){	
+		this.default={
+			href:'1',
+			title:'',
+			desc:'',
+			btn:'',
+			add:true,
+			stampDate:function(){
+				var date = new Date();
+				var t = date.getTime();
+				return t
+			}()
+		}
+		
+	}
+
+
+
+	Component.prototype.create =function(){
+			
+			this.root = document.createElement("article");
+		
+			this.root.innerHTML ='<button class="btn btn-edit" id="'+this.default.stampDate+'">Edit</button>'+
+									'<div><img src="'+this.default.href+'"/></div>'+'<h2>'+
+									this.default.title+'</h2>'+'<p>'+this.default.desc+'</p>';
+
+			var parentNode = document.getElementsByClassName('content')[0];
+	
+			parentNode.appendChild(this.root);
+			
+
+		
+	}
+
+	Component.prototype.update = function(){
+
+		var node = document.getElementById(this.default.stampDate);
+		var pNode = node.parentNode;
+		var image_v = this.default.href;
+		var title_v = this.default.title;
+		var desc_v = this.default.desc;
+
+		pNode.childNodes[1].firstChild.src = image_v;
+		pNode.childNodes[2].innerText = title_v;
+		pNode.childNodes[3].innerText = desc_v;
+		
+	}
+
+	Component.prototype.hover = function(){
+		
+		var node = document.getElementById(this.default.stampDate);
+
+		node.addEventListener('mouseenter',function(){
+			
+			this.style.opacity ="0.6";
+		})
+		node.addEventListener('mouseout',function(){
+
+			this.style.opacity ="0";
+		})
+	}
+
+	Component.prototype.editTo = function(){
+	
+		var idToModal = this.default.stampDate; 
+		
+		var node = document.getElementById(idToModal);
+	
+		node.addEventListener('click',function(e){
+			
+			var image_v = node.parentNode.childNodes[1].firstChild.src;
+			var title_v = node.parentNode.childNodes[2].innerText;
+			var desc_v = node.parentNode.childNodes[3].innerText;
+		/* add if to fix the duplicate bugs */	
+		if(document.getElementsByClassName('modal-box').length ===0){
+			var modal = new Modal();
+			modal.init({
+				tags:'Edit Article',
+				href:image_v,
+				title:title_v,
+				desc:desc_v,
+				id: idToModal,
+				add:false
+			})
+		}
+
+		})
+		
+	}
+
+		Component.prototype.init=function(opt){
+			
+			extend(this.default,opt);
+			console.log('component init');
+			document.body.childNodes[1].style.opacity = "1";
+			if(this.default.add == false){
+				this.update();
+			}
+			else{
+				this.create();
+			}
+			
+			this.editTo();
+			this.hover();
+	}
+
+	/* modal box */
+	var Modal = function(){
+
+		this.default={
+			tags:'',
+			href:'',
+			title:'',
+			desc:'',
+			id:'',
+			add:true /* if it is for the update or add the new */
+			
+		}
+
+	}
+
+	Modal.prototype.init = function(opt){
+		
+		extend(this.default,opt);
+
+		this.create();	
+		this.saveTo();
+		this.cancelTo();
+	}
+
+	Modal.prototype.create= function(){
+		document.body.childNodes[1].style.opacity = "0.5";
+		this.root = document.createElement("div");
+		this.root.className ="modal-box";
+		
+		this.root.innerHTML = '<h3>'+this.default.tags+'</h3>'+'<label>Image</label>'+'<input type="text" name="image" value="'+
+								this.default.href+
+
+							' "/>'+
+
+							'<label> Title </label>'+'<input type="text" name="title" value="'+
+							this.default.title+
+							'"/>'+'<lable>Content</lable>'+
+							'<textarea>'+
+							this.default.desc+
+							'</textarea>'+'<div>'+
+							'<button class="btn btn-save">Save</button>'+
+							'<button class="btn btn-cancel">Cancel</button>'+'</div>';
+	
+		
+		document.body.appendChild(this.root);
+
+	}
+	
+	Modal.prototype.saveTo = function(){
+		console.log('modal edit');
+			var This = this;
+			var idToComponent = This.default.id;
+			var addOrUpdate = This.default.add;
+		
+			var saveBut = document.getElementsByClassName('btn-save');
+			saveBut[0].addEventListener('click',function(){
+				var image_val = document.getElementsByName('image')[0].value;
+				var title_val = document.getElementsByName('title')[0].value;
+				var textarea_val= document.getElementsByTagName('textarea')[0].value;
+
+				var options_update ={
+					href:image_val,
+					title:title_val,
+					desc:textarea_val,
+					add:addOrUpdate,
+					stampDate:idToComponent
+				}
+				var options_add ={
+					href:image_val,
+					title:title_val,
+					desc:textarea_val,
+					add:addOrUpdate,
+					
+				}
+
+				document.body.removeChild(This.root);			
+		
+					
+					if(This.default.add ==true){
+						var component = new Component();
+						component.init(options_add);
+
+					}else{
+						var componentanother = new Component();
+						componentanother.init(options_update);
+
+					}
+					
+				
+			})
+			
+		
+	}
+
+	Modal.prototype.cancelTo = function(){
+		var This = this;
+		var cancelBut = document.getElementsByClassName('btn-cancel');
+		cancelBut[0].addEventListener('click',function(){
+			document.body.removeChild(This.root);
+			document.body.childNodes[1].style.opacity = "1";
+
+		})
+	}
+	
+
+
+
+	/* for placeholder */
+	var component = new Component();
+	component.init({
+		href:'blog-app-homepage_1.png',
+		title:'Article title goes here to introduct the content',
+		desc:'main content',
+
+	});
+
+	document.getElementById('add').addEventListener('click',function(){
+		var modal = new Modal();
+
+		modal.init({
+			tags:'Add Article',
+			add:true
+			});
+
+	})
+
+})(window)
+	</script>
+	</body>
+
+</html>
